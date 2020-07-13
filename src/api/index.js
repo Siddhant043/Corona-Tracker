@@ -4,11 +4,17 @@ const url = "https://covid19.mathdro.id/api";
 
 
 // For Cards Data
-export const fetchdata = async () => {
+export const fetchData = async (country) => {
+  let changeableUrl = url;
+
+  if(country){
+    changeableUrl = `${url}/countries/${country}`;
+  }
+
   try {
     const {
       data: { confirmed, recovered, deaths, lastUpdate },
-    } = await axios.get(url);
+    } = await axios.get(changeableUrl);
     const modifiedData = {
       confirmed,
       recovered,
@@ -38,3 +44,15 @@ export const fetchDailyData = async () => {
     return error;
   }
 };
+
+// For Country Picker data
+
+export const fetchCountries = async () => {
+  try{
+    const { data: { countries } }  = await axios.get(`${url}/countries`);
+
+    return countries.map((country) => country.name);
+  } catch(error){
+
+  }
+}
